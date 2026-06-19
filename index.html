@@ -787,22 +787,27 @@
 
   <!-- Simple waitlist handler -->
   <script>
-    document.querySelector('.waitlist-form a')?.addEventListener('click', function(e) {
-      const input = document.querySelector('.waitlist-form input');
-      const email = input.value.trim();
-      if (!email) {
-        input.style.borderColor = '#ea2261';
-        input.focus();
-        return;
-      }
-      // Local save for now — will wire up to a proper backend
-      fetch('/waitlist', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({email}) })
-        .catch(() => {});
-      input.value = '';
-      input.placeholder = '✓ You\'re on the list!';
-      input.style.borderColor = '#15be53';
-      this.textContent = 'You\'re In!';
-    });
+    btn.addEventListener('click', function(e) {
+  e.preventDefault();
+  var email = input.value.trim();
+  if (!email) {
+    input.style.borderColor = '#ea2261';
+    input.focus();
+    return;
+  }
+  // Send to ConvertKit
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://api.convertkit.com/v3/forms/bfb0243086/subscribe', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({
+    api_key: 'lZkZZX47IgLHWxafCPZFEg',
+    email: email
+  }));
+  input.value = '';
+  input.placeholder = "✓ You're on the list!";
+  input.style.borderColor = '#15be53';
+  btn.textContent = "You're In!";
+});
   </script>
 
 </body>
